@@ -68,6 +68,19 @@ async function run(context, plugins) {
   context.branches = await getBranches(options.repositoryUrl, ciBranch, context);
   context.branch = context.branches.find(({ name }) => name === ciBranch);
 
+  // treats all release branches as "equal"
+  const allTags = context.branches
+    .filter(({ type }) => type === "release")
+    .reduce(
+      (tags, branch) => [
+        ...tags,
+        ...branch.tags.filter(({ version }) => !tags.map(({ version }) => version).includes(version)),
+      ],
+      []
+    );
+
+  context.branch.tags = allTags;
+
   if (!context.branch) {
     logger.log(
       `This test run was triggered on the branch ${ciBranch}, while semantic-release is configured to only publish from ${context.branches
