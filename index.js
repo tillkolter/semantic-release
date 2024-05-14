@@ -201,14 +201,14 @@ async function run(context, plugins) {
   nextRelease.gitTag = makeTag(options.tagFormat, nextRelease.version);
   nextRelease.name = nextRelease.gitTag;
 
-  if (context.branch.type !== "prerelease" && !semver.satisfies(nextRelease.version, context.branch.range)) {
-    throw getError("EINVALIDNEXTVERSION", {
-      ...context,
-      validBranches: context.branches.filter(
-        ({ type, accept }) => type !== "prerelease" && accept.includes(nextRelease.type)
-      ),
-    });
-  }
+  // if (context.branch.type !== "prerelease" && !semver.satisfies(nextRelease.version, context.branch.range)) {
+  //   throw getError("EINVALIDNEXTVERSION", {
+  //     ...context,
+  //     validBranches: context.branches.filter(
+  //       ({ type, accept }) => type !== "prerelease" && accept.includes(nextRelease.type)
+  //     ),
+  //   });
+  // }
 
   await plugins.verifyRelease(context);
 
